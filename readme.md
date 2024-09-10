@@ -5,4 +5,6 @@ BCBOOK checked the privacy and recorded it offline, which is not recorded on blo
 BCBOOK generated the DID for Alice based on the privacy she sent and her public key.
 The blockchain recorded the process of the interaction between node alice and rootnode. Meanwhile, it updated the nodes and dids in the chain.
 
-![Uploading QQ_1726002989016.png…]()
+![QQ_1726003121432](https://github.com/user-attachments/assets/9c2be8dc-844e-40fa-9ee9-6512d9a8b24f)
+
+![Uploading QQ_1726003134769.png…]()
