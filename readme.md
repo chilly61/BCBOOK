@@ -4,3 +4,5 @@ Alice creates a personal node, which is not trusted by anyone. She encrypted the
 BCBOOK checked the privacy and recorded it offline, which is not recorded on blockchain.
 BCBOOK generated the DID for Alice based on the privacy she sent and her public key.
 The blockchain recorded the process of the interaction between node alice and rootnode. Meanwhile, it updated the nodes and dids in the chain.
+
+![Uploading QQ_1726002989016.png…]()
