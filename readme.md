@@ -17,3 +17,4 @@ In this step, you can see how we simulate:
 Nodes and DIDs update
 ![QQ_1726003433453](https://github.com/user-attachments/assets/ab57d88c-af2a-4709-ae6a-7eb1dbf66098)
 
+**Step 2:**
