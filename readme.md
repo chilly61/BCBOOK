@@ -1,4 +1,8 @@
 **Instance illustration:**
+**Preface test**:
+![QQ_1726007674482](https://github.com/user-attachments/assets/90d4e44c-efa7-4531-8a74-a3a32142de4f)
+
+
 
 **Step 1:**
 Alice creates a personal node, which is not trusted by anyone. She encrypted the privacy and sent it to the rootnode:BCBOOK.
