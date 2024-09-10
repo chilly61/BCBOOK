@@ -22,9 +22,10 @@ Alice then uses her DID to apply the admission to UBC Engineering. After 4 years
 
 In this step, you can see:
 1. How to encrypt the info between nodes.
+   
 ![QQ_1726006790222](https://github.com/user-attachments/assets/1a25eb93-48b8-4ff4-b33c-2a57ed6fd3b4)
 
-2. How to append and remove dids in a node .
+3. How to append and remove dids in a node .
 ![QQ_1726006890833](https://github.com/user-attachments/assets/4dc7e2bc-6338-4886-872b-080f6b7b7e7b)
 
-3. How to make a civil activity with multi-nodes.
+4. How to make a civil activity with multi-nodes.
