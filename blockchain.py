@@ -8,7 +8,7 @@ import encryption
 
 
 class Node:
-    def __init__(self, title, address, node_type, owners):
+    def __init__(self, title, address, node_type):
         '''
         "初始化节点"
         '''
@@ -17,7 +17,7 @@ class Node:
         self.type = node_type  # 节点类型，包括personal，business和government
         self.affiliated_nodes = []  # 附属节点列表
         self.didslist = []  # 节点的附属DIDs列表
-        self.owners = owners  # 节点的所有者DIDs
+        self.owners = []  # 节点的所有者DIDs
         self.contributions = 0  # 节点当前的贡献值，基于Owner的合计贡献值
         self.functions = []  # 节点规定的服务内容或权限，各节点不同
 
@@ -140,7 +140,7 @@ class Blockchain:
                 sender=node.address,
                 recipient=node.address,
                 amount=0,  # 不涉及资金转账
-                transaction_type="register",
+                transaction_type="node",
                 extra_data=f"Node {node.address} is now registered in the blockchain."
             )
         else:
@@ -180,23 +180,45 @@ class Blockchain:
             sender=Apply_Node,
             recipient=rootnode.address,
             amount=0,  # 不涉及资金转账
-            transaction_type="register",
+            transaction_type="did",
             extra_data=f"Node {Apply_Node.address} is now an applying for a DID. The privacy info is encrypted as {hash_privacy}"
         )
 
-    def register_DID(self, DID):
+    def register_DID(self, DID, Apply_Node, rootnode):
         """
         为某个节点注册 DID 并将其与节点关联
         :param did: DID 标识
         :param node_id: 关联的节点 ID
         """
+        Apply_Node.didslist.append(DID.did_id)
+        rootnode.didslist.append(DID.did_id)
         self.DIDs[DID.did_id] = DID
         self.new_transaction(
-            sender=DID.issuer,
-            recipient=DID.node_address,
+            sender=rootnode.address,
+            recipient=Apply_Node.address,
             amount=0,  # 不涉及资金转账
-            transaction_type="register",
+            transaction_type="did",
             extra_data=f"Node:{DID.node_address} is the owner of DID:{DID.did_id}, verified by Node: {DID.issuer}."
+        )
+
+    def append_DID(self, DID, sender, receiver):
+        receiver.didslist.append(DID.did_id)
+        self.new_transaction(
+            sender=sender.address,
+            recipient=receiver.address,
+            amount=0,  # 不涉及资金转账
+            transaction_type="did",
+            extra_data=f"Node:{receiver} is connected to {DID.did_id}."
+        )
+
+    def delete_DID(self, DID, sender, receiver):
+        receiver.didslist.remove(DID.did_id)
+        self.new_transaction(
+            sender=sender.address,
+            recipient=receiver.address,
+            amount=0,  # 不涉及资金转账
+            transaction_type="did",
+            extra_data=f"Node:{receiver} is NOT connected to {DID.did_id}."
         )
 
     def proof_of_contribution(self, node_id):
@@ -274,7 +296,9 @@ def generate_key_pair():
     return private_pem, public_pem
 
 
-BCBOOK = Node("UBC", "BCBOOK", "business", ["Alice", "Bob"])
+BCBOOK = Node("UBC", "BCBOOK", "business")
+BCBOOK.owners.append("Alice")
+BCBOOK.owners.append("Bob")
 blockchain = Blockchain(rootnode=BCBOOK)
 
 '''
@@ -309,7 +333,7 @@ public_bcbook, private_bcbook, public_key_bcbook, private_key_bcbook = encryptio
 
 # 使用Base64编码将公钥转换为字符串
 public_alice, private_alice, public_key_alice, private_key_alice = encryption.generate_public_key_string()
-node_alice = Node("Alice", public_alice, 'personal', '')
+node_alice = Node("Alice", public_alice, 'personal')
 blockchain.register_node(node_alice)
 
 
@@ -331,7 +355,9 @@ Alice_DID = DID(did_id=alice_id, civilcontribution=100,
 # blockchain.register_DID("approved",)
 
 
-blockchain.register_DID(Alice_DID)
+blockchain.register_DID(Alice_DID, node_alice, BCBOOK)
+node_alice.owners.append(alice_id)
+
 newproof = 12345
 previous_hash = blockchain.hash(
     blockchain.chain[-1]) if blockchain.chain else None
@@ -340,3 +366,26 @@ blockchain.reward_block(node_alice.address)
 '''
 Step 2: Alice applies to join the UBC using the DID
 '''
+public_ubc, private_ubc, public_key_ubc, private_key_ubc = encryption.generate_public_key_string()
+node_ubc = Node("UBC", public_ubc, 'business')
+node_ubc.functions.append("毕业审核")
+blockchain.register_node(node_ubc)
+
+public_ubc_engineering, private_ubc_engineering, public_key_ubc_engineering, private_key_ubc_engineering = encryption.generate_public_key_string()
+node_ubc_engineering = Node(
+    "UBC_Engineering", public_ubc_engineering, 'business')
+node_ubc_engineering.functions.append("毕业审核")
+
+blockchain.create_affiliated_node(
+    node_ubc.address, node_ubc_engineering)
+
+data = ["Name:John", "Education Level:Graduate", alice_id]
+personal_data = encryption.generate_info(data=data)
+encrypted_data = encryption.encrypt_personal_info(
+    personal_data, public_key_ubc_engineering)
+hash_value_data = encryption.calculate_hash(str(encrypted_data))
+decrypted_data = encryption.decrypt_personal_info(
+    encrypted_data, private_key_ubc_engineering)
+
+blockchain.append_DID(Alice_DID, node_alice, node_ubc_engineering)
+blockchain.delete_DID(Alice_DID, node_alice, node_ubc_engineering)
