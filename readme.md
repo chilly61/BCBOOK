@@ -9,7 +9,10 @@ In this step, you can see how we simulate:
 1. register a new node on chain
 2. apply a new did from node alice
 3. reply and register a new did for a node from rootnode
-![QQ_1726003121432](https://github.com/user-attachments/assets/9c2be8dc-844e-40fa-9ee9-6512d9a8b24f)
 
-![QQ_1726003134769](https://github.com/user-attachments/assets/a88999a1-6c9c-4f11-ad9f-3d42d754c89f)
+
+![QQ_1726003333967](https://github.com/user-attachments/assets/2167ca29-6fb4-4c34-9c5d-127c021aaef9)
+![QQ_1726003374950](https://github.com/user-attachments/assets/b10368ae-0aad-4708-9b7e-37ac1f3236b9)
+Nodes and DIDs update
+![QQ_1726003433453](https://github.com/user-attachments/assets/ab57d88c-af2a-4709-ae6a-7eb1dbf66098)
 
